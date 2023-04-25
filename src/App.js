@@ -19,10 +19,10 @@ class App extends Component {
   clickHandler = (circle) => {
     //console.log(circle);
     if (circle.id === this.state.current) {
-      this.setState({
-        score: this.state.score + 10,
-        rounds: 0,
-      });
+      this.setState((prevState) => ({
+        score: prevState.score + 10,
+        rounds: prevState.rounds - 1,
+      }));
     } else {
       this.endHandler();
     }
