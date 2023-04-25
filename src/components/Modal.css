@@ -1,0 +1,15 @@
+.overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.popup {
+  background-color: white;
+  width: 400px;
+  height: 100%;
+  padding: 1rem;
+  color: black;
+}
+
+p {
+  padding: 1rem 0;
+}

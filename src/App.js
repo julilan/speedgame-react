@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Circle from "./components/Circle";
+import Modal from "./components/Modal";
 import "./App.css";
 
 class App extends Component {
@@ -14,6 +15,7 @@ class App extends Component {
     current: 0,
     circles: [1, 2, 3, 4],
     gameStart: false,
+    showGameOver: false,
   };
 
   clickHandler = (circle) => {
@@ -48,8 +50,15 @@ class App extends Component {
   endHandler = () => {
     this.setState({
       gameStart: false,
+      showGameOver: true,
     });
     clearInterval(this.intervalId);
+  };
+
+  modalHandler = (e) => {
+    this.setState({
+      showGameOver: !this.state.showGameOver,
+    });
   };
 
   render() {
@@ -81,6 +90,9 @@ class App extends Component {
         >
           End
         </button>
+        {this.state.showGameOver && (
+          <Modal score={this.state.score} click={this.modalHandler} />
+        )}
       </div>
     );
   }
