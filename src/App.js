@@ -4,22 +4,16 @@ import Modal from "./components/Modal";
 import "./App.css";
 
 class App extends Component {
-  intervalId;
-  pace = 2000;
-
   state = {
     title: "Speed Game",
     score: 0,
     current: 0,
     rounds: 0,
-    circles: [
-      { id: 1, color: "salmon" },
-      { id: 2, color: "aquamarine" },
-      { id: 3, color: "lightblue" },
-      { id: 4, color: "yellow" },
-    ],
+    circles: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
+    pace: 1000,
     gameStart: false,
     showGameOver: false,
+    timer: null,
   };
 
   clickHandler = (circle) => {
@@ -53,8 +47,9 @@ class App extends Component {
   startHandler = () => {
     this.setState({
       gameStart: true,
+      timer: setInterval(this.randomizer, this.state.pace),
     });
-    this.intervalId = setInterval(this.randomizer, this.pace);
+    //this.intervalId = setInterval(this.randomizer, this.state.pace);
   };
 
   endHandler = () => {
@@ -62,7 +57,7 @@ class App extends Component {
       gameStart: false,
       showGameOver: true,
     });
-    clearInterval(this.intervalId);
+    clearInterval(this.state.timer);
   };
 
   modalHandler = (e) => {
