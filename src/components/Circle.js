@@ -2,7 +2,7 @@ import React from "react";
 import "./Circle.css";
 
 const Circle = (props) => {
-  console.log(props);
+  //console.log(props);
   return (
     <div
       className={props.class}

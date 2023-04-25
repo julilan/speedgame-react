@@ -28,10 +28,14 @@ class App extends Component {
     }
   };
 
-  randomizer = () => {
+  randomInteger = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
+  pickNew = () => {
     let nextActive;
     do {
-      nextActive = Math.floor(Math.random() * 4) + 1;
+      nextActive = this.randomInteger(1, this.state.circles.length);
       if (this.state.rounds === 5) {
         this.endHandler();
       }
@@ -47,9 +51,8 @@ class App extends Component {
   startHandler = () => {
     this.setState({
       gameStart: true,
-      timer: setInterval(this.randomizer, this.state.pace),
+      timer: setInterval(this.pickNew, this.state.pace),
     });
-    //this.intervalId = setInterval(this.randomizer, this.state.pace);
   };
 
   endHandler = () => {
