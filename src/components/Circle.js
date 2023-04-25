@@ -2,16 +2,16 @@ import React from "react";
 import "./Circle.css";
 
 const Circle = (props) => {
-  const style = {
-    backgroundColor: props.backgroundColor,
-  };
-  return (
-    <div className="circle" onClick={props.click} style={style}>
-      <p>
-        <span>{props.name}</span>
-      </p>
-    </div>
-  );
+  //console.log(props);
+  // let style = {
+  //   backgroundColor: props.backgroundColor,
+  // };
+  // if (props.class === "circle active") {
+  //   style = {
+  //     backgroundColor: "#bf1363",
+  //   };
+  // }
+  return <div className={props.class} onClick={props.click}></div>;
 };
 
 export default Circle;

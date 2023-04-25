@@ -70,14 +70,14 @@ class App extends Component {
   render() {
     //const colors = ["#EE6C4D", "#99E1D9", "#F0F7F4", "#095256"];
     // a condition to check what is the active number and then include a classname for the circle based on that
-    //const isActive = this
+    const isActive = this.state.current;
 
     const circlesList = this.state.circles.map((circle, i) => {
       return (
         <Circle
           key={circle.id}
           click={() => this.clickHandler(circle)}
-          backgroundColor={circle.color}
+          class={isActive === circle.id ? "circle active" : "circle"}
         />
       );
     });
