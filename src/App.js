@@ -13,14 +13,19 @@ class App extends Component {
     title: "Speed Game",
     score: 0,
     current: 0,
-    circles: [1, 2, 3, 4],
+    circles: [
+      { id: 1, color: "salmon" },
+      { id: 2, color: "aquamarine" },
+      { id: 3, color: "lightblue" },
+      { id: 4, color: "yellow" },
+    ],
     gameStart: false,
     showGameOver: false,
   };
 
   clickHandler = (circle) => {
-    console.log(circle);
-    if (circle === this.state.current) {
+    //console.log(circle);
+    if (circle.id === this.state.current) {
       this.setState({
         score: this.state.score + 10,
       });
@@ -58,17 +63,21 @@ class App extends Component {
   modalHandler = (e) => {
     this.setState({
       showGameOver: !this.state.showGameOver,
+      score: 0,
     });
   };
 
   render() {
-    const colors = ["#EE6C4D", "#99E1D9", "#F0F7F4", "#095256"];
+    //const colors = ["#EE6C4D", "#99E1D9", "#F0F7F4", "#095256"];
+    // a condition to check what is the active number and then include a classname for the circle based on that
+    //const isActive = this
+
     const circlesList = this.state.circles.map((circle, i) => {
       return (
         <Circle
-          key={circle}
+          key={circle.id}
           click={() => this.clickHandler(circle)}
-          backgroundColor={colors[i]}
+          backgroundColor={circle.color}
         />
       );
     });
