@@ -46,7 +46,7 @@ class App extends Component {
       current: nextActive,
       rounds: this.state.rounds + 1,
     });
-    console.log(this.state.rounds);
+    //console.log(this.state.rounds);
     //console.log("Active circle is ", nextActive);
   };
 
@@ -83,6 +83,7 @@ class App extends Component {
           key={circle.id}
           click={() => this.clickHandler(circle)}
           class={isActive === circle.id ? "circle active" : "circle"}
+          clicksActive={this.state.gameStart ? "auto" : "none"}
         />
       );
     });
