@@ -64,6 +64,7 @@ class App extends Component {
     this.setState({
       showGameOver: !this.state.showGameOver,
       score: 0,
+      current: 0,
     });
   };
 
