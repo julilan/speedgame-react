@@ -7,12 +7,11 @@ class App extends Component {
   intervalId;
   pace = 2000;
 
-  //active color #BF1363
-
   state = {
     title: "Speed Game",
     score: 0,
     current: 0,
+    rounds: 0,
     circles: [
       { id: 1, color: "salmon" },
       { id: 2, color: "aquamarine" },
@@ -28,6 +27,7 @@ class App extends Component {
     if (circle.id === this.state.current) {
       this.setState({
         score: this.state.score + 10,
+        rounds: 0,
       });
     } else {
       this.endHandler();
@@ -38,11 +38,16 @@ class App extends Component {
     let nextActive;
     do {
       nextActive = Math.floor(Math.random() * 4) + 1;
+      if (this.state.rounds === 5) {
+        this.endHandler();
+      }
     } while (nextActive === this.state.current);
     this.setState({
       current: nextActive,
+      rounds: this.state.rounds + 1,
     });
-    console.log("Active circle is ", nextActive);
+    console.log(this.state.rounds);
+    //console.log("Active circle is ", nextActive);
   };
 
   startHandler = () => {
@@ -65,12 +70,11 @@ class App extends Component {
       showGameOver: !this.state.showGameOver,
       score: 0,
       current: 0,
+      rounds: 0,
     });
   };
 
   render() {
-    //const colors = ["#EE6C4D", "#99E1D9", "#F0F7F4", "#095256"];
-    // a condition to check what is the active number and then include a classname for the circle based on that
     const isActive = this.state.current;
 
     const circlesList = this.state.circles.map((circle, i) => {
