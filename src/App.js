@@ -96,7 +96,9 @@ class App extends Component {
 
   messageHandler = (score) => {
     let result = "";
-    if (score <= 150) {
+    if (score === 0) {
+      result = "🤨";
+    } else if (score <= 150) {
       result = "Baby steps";
     } else if (score <= 400) {
       result = "Nice try";
