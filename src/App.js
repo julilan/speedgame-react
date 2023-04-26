@@ -25,12 +25,12 @@ class App extends Component {
 
   clickHandler = (circle) => {
     //console.log(circle);
-    this.clickSound.play();
     if (circle.id === this.state.current) {
       this.setState((prevState) => ({
         score: prevState.score + 10,
         rounds: prevState.rounds - 1,
       }));
+      this.clickSound.play();
     } else {
       this.endHandler();
     }
@@ -48,19 +48,29 @@ class App extends Component {
         this.endHandler();
       }
     } while (nextActive === this.state.current);
-    this.setState({
+    this.setState((prevState) => ({
       current: nextActive,
-      rounds: this.state.rounds + 1,
-    });
+      rounds: prevState.rounds + 1,
+      pace: prevState.pace - 10,
+    }));
     //console.log(this.state.rounds);
     //console.log("Active circle is ", nextActive);
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.gameStart && prevState.pace !== this.state.pace) {
+      clearInterval(this.state.timer);
+      const timerId = setInterval(this.pickNew, this.state.pace);
+      this.setState({ timer: timerId });
+    }
+  }
+
   startHandler = () => {
     this.startSound.play();
+    const timerId = setInterval(this.pickNew, this.state.pace);
     this.setState({
       gameStart: true,
-      timer: setInterval(this.pickNew, this.state.pace),
+      timer: timerId,
     });
   };
 
@@ -70,6 +80,7 @@ class App extends Component {
       gameStart: false,
       showGameOver: true,
     });
+    // console.log(this.state.pace);
     clearInterval(this.state.timer);
   };
 
@@ -79,14 +90,15 @@ class App extends Component {
       score: 0,
       current: 0,
       rounds: 0,
+      pace: 1000,
     });
   };
 
   messageHandler = (score) => {
     let result = "";
-    if (score <= 100) {
+    if (score <= 150) {
       result = "Baby steps";
-    } else if (score <= 350) {
+    } else if (score <= 400) {
       result = "Nice try";
     } else {
       result = "Proficient";
