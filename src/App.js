@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Circle from "./components/Circle";
 import Modal from "./components/Modal";
+import Level from "./components/Level";
 import tap from "./sounds/tap_sound.wav";
 import start from "./sounds/game_start.wav";
 import end from "./sounds/game_end.wav";
@@ -16,11 +17,13 @@ class App extends Component {
     score: 0,
     current: 0,
     rounds: 0,
-    circles: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
+    level: "",
+    circles: [{ id: 1 }, { id: 2 }, { id: 3 }],
     pace: 1000,
     gameStart: false,
     showGameOver: false,
     timer: null,
+    levelChosen: false,
   };
 
   clickHandler = (circle) => {
@@ -80,7 +83,7 @@ class App extends Component {
       gameStart: false,
       showGameOver: true,
     });
-    // console.log(this.state.pace);
+    //console.log(this.state.pace);
     clearInterval(this.state.timer);
   };
 
@@ -91,6 +94,8 @@ class App extends Component {
       current: 0,
       rounds: 0,
       pace: 1000,
+      level: "",
+      levelChosen: false,
     });
   };
 
@@ -106,6 +111,29 @@ class App extends Component {
       result = "Proficient";
     }
     return result;
+  };
+
+  levelHandler = (e) => {
+    //console.log("level handler was clicked");
+    console.log(e.target.name);
+    if (e.target.name === "easy") {
+      this.setState({
+        level: "easy",
+        levelChosen: true,
+      });
+    } else if (e.target.name === "medium") {
+      this.setState({
+        circles: [...this.state.circles, { id: 4 }],
+        level: "medium",
+        levelChosen: true,
+      });
+    } else {
+      this.setState({
+        circles: [...this.state.circles, { id: 4 }, { id: 5 }],
+        level: "hard",
+        levelChosen: true,
+      });
+    }
   };
 
   render() {
@@ -125,7 +153,13 @@ class App extends Component {
     return (
       <div className="app">
         <h1>{this.state.title}</h1>
-        <p>Score: {this.state.score}</p>
+        <div className={this.state.levelChosen ? "hidden" : ""}>
+          <Level click={this.levelHandler} name="easy" />
+          <Level click={this.levelHandler} name="medium" />
+          <Level click={this.levelHandler} name="hard" />
+        </div>
+        <p>Chosen level: {this.state.level} </p>
+        <p className="score">Score: {this.state.score}</p>
         <div className="game_wrapper">{circlesList}</div>
         <button
           className={!this.state.gameStart ? "" : "hidden"}
