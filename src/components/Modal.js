@@ -9,6 +9,7 @@ const Modal = (props) => {
         <p>
           <span>Your score: {props.score}</span>
         </p>
+        <p>{props.message}</p>
         <button onClick={props.click}>Close</button>
       </div>
     </div>

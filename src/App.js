@@ -1,11 +1,18 @@
 import React, { Component } from "react";
 import Circle from "./components/Circle";
 import Modal from "./components/Modal";
+import tap from "./sounds/tap_sound.wav";
+import start from "./sounds/game_start.wav";
+import end from "./sounds/game_end.wav";
 import "./App.css";
 
 class App extends Component {
+  clickSound = new Audio(tap);
+  startSound = new Audio(start);
+  endSound = new Audio(end);
+
   state = {
-    title: "Speed Game",
+    title: "Speed Test",
     score: 0,
     current: 0,
     rounds: 0,
@@ -18,6 +25,7 @@ class App extends Component {
 
   clickHandler = (circle) => {
     //console.log(circle);
+    this.clickSound.play();
     if (circle.id === this.state.current) {
       this.setState((prevState) => ({
         score: prevState.score + 10,
@@ -49,6 +57,7 @@ class App extends Component {
   };
 
   startHandler = () => {
+    this.startSound.play();
     this.setState({
       gameStart: true,
       timer: setInterval(this.pickNew, this.state.pace),
@@ -56,6 +65,7 @@ class App extends Component {
   };
 
   endHandler = () => {
+    this.endSound.play();
     this.setState({
       gameStart: false,
       showGameOver: true,
@@ -70,6 +80,18 @@ class App extends Component {
       current: 0,
       rounds: 0,
     });
+  };
+
+  messageHandler = (score) => {
+    let result = "";
+    if (score <= 100) {
+      result = "Baby steps";
+    } else if (score <= 350) {
+      result = "Nice try";
+    } else {
+      result = "Proficient";
+    }
+    return result;
   };
 
   render() {
@@ -104,7 +126,11 @@ class App extends Component {
           End
         </button>
         {this.state.showGameOver && (
-          <Modal score={this.state.score} click={this.modalHandler} />
+          <Modal
+            score={this.state.score}
+            click={this.modalHandler}
+            message={this.messageHandler(this.state.score)}
+          />
         )}
       </div>
     );
