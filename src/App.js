@@ -11,28 +11,29 @@ class App extends Component {
   startSound = new Audio(start);
   endSound = new Audio(end);
 
+  timer;
+
   state = {
-    title: "Speed Test",
+    title: "Speed Test 2.0",
     score: 0,
     current: 0,
     rounds: 0,
-    circles: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
+    circles: [1, 2, 3, 4],
     pace: 1000,
     gameStart: false,
     showGameOver: false,
-    timer: null,
   };
 
   clickHandler = (circle) => {
     //console.log(circle);
-    if (circle.id === this.state.current) {
-      this.setState((prevState) => ({
-        score: prevState.score + 10,
-        rounds: prevState.rounds - 1,
-      }));
+    if (circle === this.state.current) {
+      this.setState({
+        score: this.state.score + 10,
+        rounds: this.state.rounds - 1,
+      });
       this.clickSound.play();
     } else {
-      this.endHandler();
+      return this.endHandler();
     }
   };
 
@@ -41,47 +42,39 @@ class App extends Component {
   };
 
   pickNew = () => {
+    if (this.state.rounds >= 3) {
+      return this.endHandler();
+    }
+
     let nextActive;
+
     do {
       nextActive = this.randomInteger(1, this.state.circles.length);
-      if (this.state.rounds === 5) {
-        this.endHandler();
-      }
     } while (nextActive === this.state.current);
-    this.setState((prevState) => ({
-      current: nextActive,
-      rounds: prevState.rounds + 1,
-      pace: prevState.pace - 10,
-    }));
-    //console.log(this.state.rounds);
-    //console.log("Active circle is ", nextActive);
-  };
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.gameStart && prevState.pace !== this.state.pace) {
-      clearInterval(this.state.timer);
-      const timerId = setInterval(this.pickNew, this.state.pace);
-      this.setState({ timer: timerId });
-    }
-  }
+    this.setState({
+      current: nextActive,
+      rounds: this.state.rounds + 1,
+      pace: this.state.pace * 0.97,
+    });
+    this.timer = setTimeout(this.pickNew, this.state.pace);
+  };
 
   startHandler = () => {
     this.startSound.play();
-    const timerId = setInterval(this.pickNew, this.state.pace);
     this.setState({
       gameStart: true,
-      timer: timerId,
     });
+    this.pickNew();
   };
 
   endHandler = () => {
     this.endSound.play();
+    clearTimeout(this.timer);
     this.setState({
       gameStart: false,
       showGameOver: true,
     });
-    // console.log(this.state.pace);
-    clearInterval(this.state.timer);
   };
 
   modalHandler = (e) => {
@@ -98,9 +91,9 @@ class App extends Component {
     let result = "";
     if (score === 0) {
       result = "🤨";
-    } else if (score <= 150) {
+    } else if (score <= 80) {
       result = "Baby steps";
-    } else if (score <= 400) {
+    } else if (score <= 300) {
       result = "Nice try";
     } else {
       result = "Proficient";
@@ -114,9 +107,9 @@ class App extends Component {
     const circlesList = this.state.circles.map((circle, i) => {
       return (
         <Circle
-          key={circle.id}
+          key={circle}
           click={() => this.clickHandler(circle)}
-          class={isActive === circle.id ? "circle active" : "circle"}
+          class={isActive === circle ? "circle active" : "circle"}
           clicksActive={this.state.gameStart ? "auto" : "none"}
         />
       );
